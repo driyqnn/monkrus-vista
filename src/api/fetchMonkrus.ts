@@ -5,6 +5,23 @@ const DATA_URL = 'https://raw.githubusercontent.com/dvuzu/monkrus-search/refs/he
 let cachedData: Post[] | null = null;
 let cacheTimestamp: number | null = null;
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+const CACHE_KEY = 'monkrus_data_cache';
+
+// Try to load from localStorage on module load
+try {
+  const stored = localStorage.getItem(CACHE_KEY);
+  if (stored) {
+    const { data, timestamp } = JSON.parse(stored);
+    if (Date.now() - timestamp < CACHE_DURATION) {
+      cachedData = data;
+      cacheTimestamp = timestamp;
+    } else {
+      localStorage.removeItem(CACHE_KEY);
+    }
+  }
+} catch (error) {
+  console.warn('Failed to load cache from localStorage:', error);
+}
 
 export async function fetchMonkrus(timeout = 10000): Promise<Post[]> {
   // Return cached data if still valid
@@ -41,9 +58,18 @@ export async function fetchMonkrus(timeout = 10000): Promise<Post[]> {
       Array.isArray(item.links)
     );
     
-    // Cache the data
+    // Cache the data in memory and localStorage
     cachedData = validatedData;
     cacheTimestamp = Date.now();
+    
+    try {
+      localStorage.setItem(CACHE_KEY, JSON.stringify({
+        data: validatedData,
+        timestamp: cacheTimestamp,
+      }));
+    } catch (error) {
+      console.warn('Failed to cache to localStorage:', error);
+    }
     
     return validatedData;
   } catch (error) {
@@ -59,6 +85,11 @@ export async function fetchMonkrus(timeout = 10000): Promise<Post[]> {
 export function clearCache(): void {
   cachedData = null;
   cacheTimestamp = null;
+  try {
+    localStorage.removeItem(CACHE_KEY);
+  } catch (error) {
+    console.warn('Failed to clear cache from localStorage:', error);
+  }
 }
 
 export function refresh(): Promise<Post[]> {
