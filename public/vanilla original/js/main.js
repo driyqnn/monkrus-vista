@@ -11,9 +11,18 @@ export async function loadData() {
   try {
     showLoading(elements);
     
-    const data = await fetchData();
-    state.allItems = data;
-    processData();
+    // Use progressive loading callback
+    const data = await fetchData((dataChunk) => {
+      // Immediately process and render the data
+      state.allItems = dataChunk;
+      processData();
+    });
+    
+    // Final update if needed
+    if (data && data !== state.allItems) {
+      state.allItems = data;
+      processData();
+    }
 
   } catch (error) {
     console.error('Failed to load data:', error);
