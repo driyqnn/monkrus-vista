@@ -33,10 +33,14 @@ export function cacheData(data) {
   }
 }
 
-export async function fetchData() {
+export async function fetchData(onDataChunk) {
   // Check cache first
   const cachedData = getCachedData();
   if (cachedData) {
+    // Return cached data immediately
+    if (onDataChunk) {
+      onDataChunk(cachedData);
+    }
     return cachedData;
   }
 
@@ -57,6 +61,12 @@ export async function fetchData() {
 
   // Cache the data
   cacheData(validatedData);
+  
+  // Call chunk callback for progressive rendering
+  if (onDataChunk) {
+    onDataChunk(validatedData);
+  }
+  
   return validatedData;
 }
 

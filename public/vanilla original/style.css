@@ -477,8 +477,8 @@ body {
 
 /* Card Content */
 .card-content {
-  margin-top: 20px;
-  padding-top: 20px;
+  margin-top: 16px;
+  padding-top: 16px;
   border-top: 1px solid var(--border);
   animation: slideDown 0.3s ease-out;
 }
@@ -498,11 +498,11 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .mirrors-header h3 {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--text-secondary);
 }
@@ -537,7 +537,28 @@ body {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.mirrors-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mirrors-list::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 3px;
+}
+
+.mirrors-list::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.mirrors-list::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
 }
 
 .mirror-item {
@@ -547,8 +568,8 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
-  padding: 14px 16px;
+  gap: 12px;
+  padding: 10px 12px;
   transition: var(--transition);
 }
 
@@ -565,7 +586,7 @@ body {
 .mirror-info {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   flex: 1;
   min-width: 0;
 }
@@ -599,12 +620,12 @@ body {
 .mirror-details {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 0;
   min-width: 0;
 }
 
 .mirror-domain {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--text-primary);
   white-space: nowrap;
@@ -620,13 +641,13 @@ body {
 }
 
 .mirror-time {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-muted);
 }
 
 .mirror-actions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 0;
 }
 
@@ -637,12 +658,18 @@ body {
   border-radius: 6px;
   color: var(--text-secondary);
   cursor: pointer;
-  padding: 8px;
+  padding: 6px;
   transition: var(--transition);
   display: flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
+}
+
+.copy-button svg,
+.download-button svg {
+  width: 16px;
+  height: 16px;
 }
 
 .copy-button:hover,
@@ -819,6 +846,14 @@ body {
 }
 
 /* Responsive */
+/* Tablet */
+@media (max-width: 1024px) {
+  .mirrors-list {
+    max-height: 350px;
+  }
+}
+
+/* Mobile */
 @media (max-width: 768px) {
   .container {
     padding: 0 16px;
@@ -869,12 +904,21 @@ body {
   .mirror-item {
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .mirror-info {
+    width: 100%;
   }
 
   .mirror-actions {
     width: 100%;
     justify-content: flex-end;
+  }
+  
+  .mirrors-list {
+    max-height: 300px;
   }
 
   .sidebar {
